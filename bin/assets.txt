@@ -1,0 +1,57 @@
+Texture     4           ../../../bin/images/megaman/megaStand.png
+Texture     5           ../../../bin/images/megaman/megaShot.png
+Texture     2           ../../../bin/images/megaman/megaRun.png
+Texture     3           ../../../bin/images/megaman/megaJump.png
+Texture     6           ../../../bin/images/megaman/megaBuster.png
+Texture     1           ../../../bin/images/mario/ground.png
+Texture     12         ../../../bin/images/mario/SmallCloud.png
+Texture     7           ../../../bin/images/animations/explosion.png
+Texture     8           ../../../bin/images/mario/BigBush.png
+Texture     10         ../../../bin/images/mario/SmallBush.png
+Texture     13         ../../../bin/images/mario/GoombaWalk.png
+Texture     14         ../../../bin/images/mario/Busher.png
+Texture     15         ../../../bin/images/mario/SmallPipe.png
+Texture     16         ../../../bin/images/mario/BigCloud.png
+Texture     17         ../../../bin/images/mario/GoombaDeath2.png
+Texture     11         ../../../bin/images/animations/coinspin.png
+Texture     23         ../../../bin/images/animations/AnimTiles.png
+Texture     25         ../../../bin/images/animations/AnimTiles1.png
+Texture     27         ../../../bin/images/animations/AnimTiles2.png
+Texture     29         ../../../bin/images/mario/NQuestionBox.png
+Texture     31         ../../../bin/images/animations/star.png
+Texture     33         ../../../bin/images/animations/mushroom.png
+Texture     35         ../../../bin/images/animations/flower.png
+Animation   4           4           1   1
+Animation   1           1           1   1
+Animation   2           2           3   8 
+Animation   3           3           1   1
+Animation   5           5           1   1
+Animation   10          8           1   1
+Animation   6           6           1   1
+Animation   12          12          1   1
+Animation   7           7           12  5
+Animation   14          10           1   1
+Animation   15          15           1   1
+Animation   16          14           1   1
+Animation   17          13           2   8
+Animation   18          16           1   1
+Animation   19          17           3   5
+Animation   11          11           6   9
+Animation   23          23           4   8
+Animation   25          25           1   1
+Animation   27          27           1   1
+Animation   29          29           1   1
+Animation   31          31           3   5
+Animation   33          33           2   5
+Animation   35          35           3   5
+Font        1           ../../../bin/fonts/numbers.ttf
+Font        2           ../../../bin/fonts/pixeled.ttf
+Sound        1           ../../../bin/sounds/jump.wav
+Sound        2           ../../../bin/sounds/music.ogg
+Sound        3           ../../../bin/sounds/coin.wav
+Sound        4           ../../../bin/sounds/fireball.wav
+Sound        5           ../../../bin/sounds/game_over.wav
+Sound        6           ../../../bin/sounds/mario_die.wav
+Sound        7           ../../../bin/sounds/pause.wav
+Sound        8           ../../../bin/sounds/powerup.wav
+Sound        9           ../../../bin/sounds/stomp.wav

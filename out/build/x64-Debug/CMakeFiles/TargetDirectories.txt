@@ -1,0 +1,3 @@
+D:/github/Not_Mario/out/build/x64-Debug/CMakeFiles/SFML3.dir
+D:/github/Not_Mario/out/build/x64-Debug/CMakeFiles/edit_cache.dir
+D:/github/Not_Mario/out/build/x64-Debug/CMakeFiles/rebuild_cache.dir
