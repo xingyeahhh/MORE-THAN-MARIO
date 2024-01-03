@@ -21,6 +21,11 @@ Texture     29         ../../../bin/images/mario/NQuestionBox.png
 Texture     31         ../../../bin/images/animations/star.png
 Texture     33         ../../../bin/images/animations/mushroom.png
 Texture     35         ../../../bin/images/animations/flower.png
+Texture     37         ../../../bin/images/mario/Bowser1.png
+Texture     39         ../../../bin/images/mario/Bowser2.png
+Texture     41         ../../../bin/images/mario/Bowser3.png
+Texture     43         ../../../bin/images/mario/TallPipe.png
+Texture     45         ../../../bin/images/mario/WALL.png
 Animation   4           4           1   1
 Animation   1           1           1   1
 Animation   2           2           3   8 
@@ -44,6 +49,11 @@ Animation   29          29           1   1
 Animation   31          31           3   5
 Animation   33          33           2   5
 Animation   35          35           3   5
+Animation   37          37           6   8
+Animation   39          39           6   6
+Animation   41          41           4   5
+Animation   43          43           1   1
+Animation   45          45           1   1
 Font        1           ../../../bin/fonts/numbers.ttf
 Font        2           ../../../bin/fonts/pixeled.ttf
 Sound        1           ../../../bin/sounds/jump.wav
@@ -55,3 +65,4 @@ Sound        6           ../../../bin/sounds/mario_die.wav
 Sound        7           ../../../bin/sounds/pause.wav
 Sound        8           ../../../bin/sounds/powerup.wav
 Sound        9           ../../../bin/sounds/stomp.wav
+Sound        10           ../../../bin/sounds/world_clear.wav

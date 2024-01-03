@@ -94,6 +94,7 @@ void Scene_Menu::sRender() {
     m_game->window().draw(m_menuText);
   }
 
+
   m_menuText.setString("    Down :  S,     Up : W,     D : Do");
   m_menuText.setFillColor(sf::Color::Black);
   m_menuText.setCharacterSize(16);

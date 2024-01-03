@@ -20,6 +20,7 @@ class Scene_Play : public Scene {
   sf::Text gameOverText;
   sf::Text shareText;
   sf::Text pressText;
+  sf::Text winText;
   sf::Sound m_backgroundMusic;
   sf::Sound m_jumpMusic;
   sf::Sound m_coinMusic;
@@ -29,11 +30,16 @@ class Scene_Play : public Scene {
   sf::Sound m_pauseMusic;
   sf::Sound m_eatMusic;
   sf::Sound m_hurtMusic;
+  sf::Sound m_winMusic;
+  sf::Clock m_bossBulletTimer;
+  sf::Clock bossDefeatTimer;
   protected:
   std::shared_ptr<Entity> m_player;
   std::string m_levelPath;
   PlayerConfig m_playerConfig;
   EnemyConfig m_enemyConfig;
+  EnemyConfig m_bossConfig;
+  bool bossalive = true;
   bool m_drawTextures = true;
   bool m_drawCollision = false;
   bool m_drawGrid = false;
@@ -49,7 +55,9 @@ class Scene_Play : public Scene {
   void onEnd() override;
 
   void spawnBullet(const std::shared_ptr<Entity> &entity);
+  void spawnBossBullet(const std::shared_ptr<Entity>& entity);
   void spawnEnemy();
+  void spawnBoss();
 
   Vec2 gridToMidPixel(float gridX, float gridY, std::shared_ptr<Entity> entity);
 

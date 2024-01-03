@@ -31,6 +31,11 @@ enum eLevelEntities {
   STAR = 31,
   MUSHROOM = 33,
   FLOWER = 35,
+  BOSS = 37,
+  BOSS2 = 39,
+  BOSSSHOOT = 41,
+  LONGPIPE = 43,
+  WALL = 45,
   LAST
 };
 

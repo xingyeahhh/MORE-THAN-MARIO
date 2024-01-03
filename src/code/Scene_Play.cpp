@@ -8,6 +8,7 @@
 #include <iostream>
 
 Scene_Play::Scene_Play(GameEngine *gameEngine, const std::string &levelPath): Scene(gameEngine), m_levelPath(levelPath) {
+  m_bossBulletTimer.restart(); // 初始化计时器
   init(m_levelPath);
 }
 
@@ -84,6 +85,10 @@ void Scene_Play::init(const std::string &levelPath) {
   m_hurtMusic.setBuffer(buffer9);
   m_hurtMusic.setLoop(false);
 
+  const sf::SoundBuffer& buffer10 = m_game->getAssets().getSound(eSoundTypes::WINSOUND);
+  m_winMusic.setBuffer(buffer10);
+  m_winMusic.setLoop(false);
+
   m_gridText.setCharacterSize(12);
   m_gridText.setFont(m_game->getAssets().getFont(eFontTypes::NUMBERS));
 
@@ -113,7 +118,7 @@ void Scene_Play::loadMap(const std::string &filePath) {
   eLevelEntities level_entities;
   eAnimationTypes animation_types;
   for (int i = 0; i < 13; i++) {
-    for (int j = 0; j < 36; j++) {
+    for (int j = 0; j < 30; j++) {
       file >> value;
       if (value == -1) continue;
       assert(file.good());// checking for any error in the file reading
@@ -157,8 +162,6 @@ void Scene_Play::loadLevel(const std::string &filePath) {
   //        use the PlayerConfig struct m_playerConfig to store player
   //        proprieties this struct is defined at the top of Scene_Play.h
 
-  // NOTE : all the code below is a sample code which shows you how to
-  //        set up and use entities with the new syntax, it should be removed
   std::ifstream file(filePath);
   std::string str;
   int Intstr;
@@ -181,10 +184,14 @@ void Scene_Play::loadLevel(const std::string &filePath) {
           break;                     // that has to be read from file
         case GOOMBA:
           file >> m_enemyConfig.X >> m_enemyConfig.Y >> m_enemyConfig.SPEED 
-               >> m_enemyConfig.GRAVITY
-              ;
+               >> m_enemyConfig.GRAVITY;
           spawnEnemy(); // Spawn a Goomba at the specified position
           break;
+
+        case BOSS:
+            file >> m_bossConfig.X >> m_bossConfig.Y >> m_bossConfig.SPEED >> m_bossConfig.GRAVITY;
+            spawnBoss(); // Spawn a Goomba at the specified position
+            break;
         default:
           int x, y;
           file >> x >> y;
@@ -210,47 +217,6 @@ void Scene_Play::loadLevel(const std::string &filePath) {
   //this order is for using level's information on the position of player
   spawnPlayer();
 
-  /*
-    // some sample entities
-    auto brick = m_entityManager.addEntity("tile");
-    // IMPORTANT : always add the CAnimation component first so that gridToMidPixel can compute correctly
-    brick->addComponents<CAnimation>(m_game->getAssets().getAnimation("Brick"),true); 
-    brick->addComponents<CTransform>(Vec2(96, 480));
-    // NOTE : you finally code should position the entity with the grid x,y position read from the file
-    //  brick->addComponents<CTransform>(gridToMidPixel(gridX, gridY, brick))
-
-    if (brick->getComponent<CAnimation>().animation.getName() == "Brick")
-      std::cout << "This could be a good way of identifying if a tile is a brick!" << std::endl;
-
-  */
-  //  auto brick = m_entityManager.addEntity(eLevelEntities::BRICK);
-  //  brick->addComponents<CAnimation>(m_game->getAssets().getAnimation(eAnimationTypes::AniBRICK),
-  //  true); brick->addComponents<CTransform>(Vec2(224, 480));
-  //  // add a bounding box, this will now show up if we press the 'C' key
-  //  brick->addComponents<CBoundingBox>(m_gridSize);
-  //	brick->getComponent<CTransform>().scale.y =
-  // brick->getComponent<CBoundingBox>().size.y /
-  // brick->getComponent<CAnimation>().animation.getSize().y;
-  //	brick->getComponent<CTransform>().scale.x =
-  // brick->getComponent<CBoundingBox>().size.x /
-  // brick->getComponent<CAnimation>().animation.getSize().x;
-  //
-  //  auto question = m_entityManager.addEntity("tile");
-  //  question->addComponents<CAnimation>(m_game->getAssets().getAnimation("Question"),
-  //  true); question->addComponents<CTransform>(Vec2(352, 480));
-
-  // NOTE : THIS IS INCREDIBLY IMPORTANT PLEASE READ THIS EXAMPLE
-  //        Components are now returned as reference rather than pointers
-  //        if you do not specify a reference variable type, it will COPY the
-  //        component here is an example
-  //
-  //        This will COPY the transform into the variable 'transform1' - it's
-  //        INCORRECT any changes you make to transform1 will not be changed
-  //        inside the entity auto transform1 = entity->get<CTransform>();
-  //
-  //        This will REFERENCE the transform with the variable 'transform2' -
-  //        it's CORRECT Now any changes you make to transform2 will be changed
-  //        inside the entity auto & transform2 = entity->get<CTransform>()
 }
 
 void Scene_Play::spawnPlayer() {
@@ -282,6 +248,28 @@ void Scene_Play::spawnBullet(const std::shared_ptr<Entity> &entity) {
   bullet->addComponents<CLifeSpan>(1.5);
 }
 
+
+void Scene_Play::spawnBossBullet(const std::shared_ptr<Entity>& entity) {
+    Vec2 entityPos = entity->getComponent<CTransform>().pos;
+
+    (entity->getComponent<CTransform>().scale.x < 0) ? entityPos.x -= 52 : entityPos.x += 20;
+    // Randomize the y offset each time a bullet is spawned
+    int yrandOffset = -10 + (std::rand() % 30); // Random number between -50 and -10
+    entityPos.y += yrandOffset;
+    
+    // TODO: this should spawn a bullet at the given entity, going in the
+    // direction the entity is facing
+    auto bullet = m_entityManager.addEntity(DYNAMIC, eLevelEntities::BOSSSHOOT);
+    bullet->addComponents<CAnimation>(m_game->getAssets().getAnimation(eAnimationTypes::anibossSHOOT), true);
+    bullet->addComponents<CTransform>(gridToMidPixel((entityPos.x), entityPos.y, bullet));
+    bullet->addComponents<CBoundingBox>(bullet->getComponent<CAnimation>().animation.getSize() / 2);
+    bullet->getComponent<CTransform>().velocity.x = entity->getComponent<CTransform>().scale.x * m_bossConfig.SPEED * 3;
+    // 设置子弹的 scale.x 以匹配 BOSS 的朝向
+    bullet->getComponent<CTransform>().scale.x = entity->getComponent<CTransform>().scale.x;
+    bullet->addComponents<CLifeSpan>(1);
+}
+
+
 void Scene_Play::spawnEnemy() {
   // TODO(due: Friday): implement all the spawn enemy stuff
   // outh use the goomba animation and be added as Tile entity
@@ -294,12 +282,21 @@ void Scene_Play::spawnEnemy() {
   enemy->getComponent<CTransform>().prevPos = enemy->getComponent<CTransform>().pos;
   enemy->addComponents<CBoundingBox>(enemy->getComponent<CAnimation>().animation.getSize());
   enemy->getComponent<CTransform>().velocity.x = m_enemyConfig.SPEED;
-
   // Set the gravity for the Goomba
-  
-  enemy->addComponents<CGravity>().gravity = m_enemyConfig.GRAVITY;
-  
+  enemy->addComponents<CGravity>().gravity = m_enemyConfig.GRAVITY; 
 }
+
+void Scene_Play::spawnBoss() {
+    auto boss = m_entityManager.addEntity(DYNAMIC, BOSS);
+    boss->addComponents<CAnimation>(m_game->getAssets().getAnimation(aniboss), true);
+    boss->addComponents<CTransform>(gridToMidPixel(m_bossConfig.X * 64, m_bossConfig.Y * 64, boss));
+    boss->getComponent<CTransform>().prevPos = boss->getComponent<CTransform>().pos;
+    boss->addComponents<CBoundingBox>(boss->getComponent<CAnimation>().animation.getSize());
+    boss->getComponent<CTransform>().velocity.x = m_bossConfig.SPEED;
+    // Set the gravity for the BOSS
+    boss->addComponents<CGravity>().gravity = m_bossConfig.GRAVITY;
+}
+
 
 void Scene_Play::update() {
     if (m_paused) {
@@ -319,10 +316,27 @@ void Scene_Play::update() {
 
     // The rest of your game update logic
     m_entityManager.update();
+    
     if (!m_player->isActive()) {
-        //m_isGameOver = true;
         m_backgroundMusic.stop();
         return;
+    }
+
+    /*if (!bossalive) {
+        m_backgroundMusic.stop();
+        return;
+    }*/
+    
+   
+    // BOSS 发射子弹逻辑
+    for (auto& entity : m_entityManager.getEntities()) {
+        if (entity->tag() == BOSS && entity->isActive()) {
+            if (m_bossBulletTimer.getElapsedTime().asSeconds() >= 1.0) {
+                // 发射子弹
+                spawnBossBullet(entity);
+                m_bossBulletTimer.restart(); // 重置计时器
+            }
+        }
     }
     sMovement();
     sCollision();
@@ -400,9 +414,9 @@ void Scene_Play::sMovement() {
 
   }
 
-  // add spawnEnemy()
+  
   if (m_player->getComponent<CTransform>().pos.y > height())
-    spawnPlayer();
+      m_player->destroy();
 }
 
 void Scene_Play::sLifespan() {
@@ -464,10 +478,24 @@ void Scene_Play::sCollision() {
                 // Skip collision logic for Goomba-to-Goomba collision
                 continue;
             }
-           
 
-            
-            
+            if (dynamicEntity->tag() == GOOMBA && multiEntity->tag() == COIN) {
+                // Skip collision logic for Goomba-to-Goomba collision
+                continue;
+            }
+           
+            if (dynamicEntity->tag() == GOOMBA && multiEntity->tag() == STAR) {
+                // Skip collision logic for Goomba-to-Goomba collision
+                continue;
+            }
+            if (dynamicEntity->tag() == GOOMBA && multiEntity->tag() == MUSHROOM) {
+                // Skip collision logic for Goomba-to-Goomba collision
+                continue;
+            }
+            if (dynamicEntity->tag() == GOOMBA && multiEntity->tag() == FLOWER) {
+                // Skip collision logic for Goomba-to-Goomba collision
+                continue;
+            }
 
             Vec2 initialOverlap = m_physics.GetOverlap(dynamicEntity, multiEntity);
             if (initialOverlap.x > 0 && initialOverlap.y > 0 && dynamicEntity->tag() == BULLET) {
@@ -475,11 +503,22 @@ void Scene_Play::sCollision() {
                 continue;
             }
 
+           
+
             overlapRect = m_physics.GetOverlap(multiEntity, dynamicEntity);
             if (dynamicEntity->tag() != GOOMBA && dynamicEntity->getComponent<CTransform>().pos.x <= 32)
                 dynamicEntity->getComponent<CTransform>().pos.x += 1; // Boundary analysis
 
             if (overlapRect > 0) {
+
+                if (dynamicEntity->tag() == BOSSSHOOT) {
+                    // Check if the tag is neither BOSS nor GOOMBA
+                    if (multiEntity->tag() != BOSS && multiEntity->tag() != GOOMBA) {
+                        dynamicEntity->destroy();
+                        continue;
+                    }
+                }
+
 
                 if (dynamicEntity->tag() == GOOMBA) {
                     auto multiEntityTag = multiEntity->tag();
@@ -490,6 +529,17 @@ void Scene_Play::sCollision() {
                         }
                     }
                 }
+
+                if (dynamicEntity->tag() == BOSS) {
+                    auto multiEntityTag = multiEntity->tag();
+                    if (multiEntityTag == BRICK || multiEntityTag == QUESTIONBOX || multiEntityTag == NORMALBOX) {
+                        if (dynamicEntity->getComponent<CState>().notGrounded == true) {
+                            dynamicEntity->getComponent<CState>().notGrounded = false;
+                            dynamicEntity->getComponent<CTransform>().pos.y -= (dynamicEntity->getComponent<CTransform>().pos.y - dynamicEntity->getComponent<CTransform>().prevPos.y) / std::abs(dynamicEntity->getComponent<CTransform>().pos.y - dynamicEntity->getComponent<CTransform>().prevPos.y) * overlapRect.y;
+                        }
+                    }
+                }
+
 
                 if (dynamicEntity->tag() == PLAYER && multiEntity->tag() == MarioWater) {
                     m_hurtMusic.play();
@@ -504,6 +554,15 @@ void Scene_Play::sCollision() {
                     if (dynamicEntity->getComponent<CHealth>().value <= 0) dynamicEntity->destroy();
                     continue;
                 }
+
+                if (dynamicEntity->tag() == BOSS && multiEntity->tag() == MarioFireLand) {    
+                    continue;
+                }
+
+                if (dynamicEntity->tag() == BOSS && multiEntity->tag() == MarioWater) {
+                    continue;
+                }
+
 
                 if (dynamicEntity->tag() == GOOMBA && multiEntity->tag() == MarioWater) {
                     dynamicEntity->destroy();
@@ -559,14 +618,14 @@ void Scene_Play::sCollision() {
 
                     if (dynamicEntity->getComponent<CTransform>().pos.y < dynamicEntity->getComponent<CTransform>().prevPos.y) { 
 
-                        if (multiEntity->tag() == GOOMBA && dynamicEntity->tag() == PLAYER) {
+                      /*  if (multiEntity->tag() == GOOMBA && dynamicEntity->tag() == PLAYER) {
                             m_hurtMusic.play();
                             multiEntity->destroy();
                             dynamicEntity->getComponent<CHealth>().value -= 10;
                             if (dynamicEntity->getComponent<CHealth>().value <= 0) dynamicEntity->destroy();
                             std::cout << "Goomba kill man";
                             break;
-                        }
+                        }*/
 
                         switch (multiEntity->tag()) {
                             
@@ -576,7 +635,7 @@ void Scene_Play::sCollision() {
                         case BRICK:
                             std::cout << "hit brick";
                             multiEntity->removeComponent<CBoundingBox>(); // remove thoroughly
-                            //multiEntity->getComponent<CBoundingBox>().size = { 0, 0 };
+                            
                             multiEntity->addComponents<CAnimation>(m_game->getAssets().getAnimation(eAnimationTypes::EXPLOSION), false);
                             
                             dynamicEntity->getComponent<CInput>().up = false;
@@ -643,14 +702,23 @@ void Scene_Play::sCollision() {
                             dynamicEntity->getComponent<CTransform>().velocity.y = 0;
                            
                         }
+
+                        if (dynamicEntity->tag() == BOSS) {
+
+                            //std::cout << "arrive ground!!" << dynamicEntity->getComponent<CTransform>().velocity.x;
+                            dynamicEntity->getComponent<CTransform>().velocity.y = 0;
+
+                        }
+
                         
+
                         dynamicEntity->getComponent<CTransform>().velocity.y = 0;
                         if (dynamicEntity->tag() == PLAYER && multiEntity->tag() == GOOMBA) {
                             multiEntity->addComponents<CAnimation>(m_game->getAssets().getAnimation(eAnimationTypes::aniGOODEATH), false);
                             multiEntity->getComponent<CBoundingBox>().size = { 0, 0 };
                             multiEntity->getComponent<CTransform>().has = false;  
-                            std::cout << "man kill goomba";
-                            //continue;
+                            //std::cout << "man kill goomba";
+                            
                         }
                         
 
@@ -666,11 +734,25 @@ void Scene_Play::sCollision() {
                         dynamicEntity->getComponent<CTransform>().pos.x -= (dynamicEntity->getComponent<CTransform>().pos.x - dynamicEntity->getComponent<CTransform>().prevPos.x) / std::abs(dynamicEntity->getComponent<CTransform>().pos.x - dynamicEntity->getComponent<CTransform>().prevPos.x) * overlapRect.x;
                         if (dynamicEntity->tag() == BULLET)
                             dynamicEntity->destroy();
-                        if (dynamicEntity->tag() == GOOMBA)
+                        if (dynamicEntity->tag() == GOOMBA) {
                             dynamicEntity->getComponent<CState>().notGrounded = false;
-            
+
                             dynamicEntity->getComponent<CTransform>().velocity.x *= -1;
-                            //std::cout << "horizontal attack!!"<< dynamicEntity->getComponent<CTransform>().velocity.x;
+                        }
+                        if (dynamicEntity->tag() == BOSS) {
+                            dynamicEntity->getComponent<CState>().notGrounded = false;
+                            dynamicEntity->getComponent<CTransform>().velocity.y = 0;
+                            dynamicEntity->getComponent<CTransform>().velocity.x *= -1;
+                            if (dynamicEntity->getComponent<CTransform>().velocity.x > 0) {
+                                // 向右移动，确保动画未翻转
+                                dynamicEntity->getComponent<CTransform>().scale.x = std::abs(dynamicEntity->getComponent<CTransform>().scale.x);
+                            }
+                            else if (dynamicEntity->getComponent<CTransform>().velocity.x < 0) {
+                                // 向左移动，翻转动画
+                                dynamicEntity->getComponent<CTransform>().scale.x = -std::abs(dynamicEntity->getComponent<CTransform>().scale.x);
+                            }
+                        }
+                            
                     }
                     else {
                         // Handling for other entities
@@ -692,8 +774,109 @@ void Scene_Play::sCollision() {
                                 if (multiEntity->getComponent<CHealth>().value <= 0) multiEntity->destroy();
                             }
                         }
+                        else if ((dynamicEntity->tag() == BOSS && multiEntity->tag() == PLAYER) ||
+                            (dynamicEntity->tag() == PLAYER && multiEntity->tag() == BOSS)) {
+                            if (dynamicEntity->tag() == PLAYER) {
+                                m_hurtMusic.play();
+                                dynamicEntity->getComponent<CHealth>().value -= 20;
+                                if (dynamicEntity->getComponent<CTransform>().velocity.x > 0) {
+                                    // 向右移动，确保动画未翻转
+                                    dynamicEntity->getComponent<CTransform>().pos.x -= 250;
+                                    dynamicEntity->getComponent<CTransform>().pos.y -= 100;
+                                }
+                                else if (dynamicEntity->getComponent<CTransform>().velocity.x < 0) {
+                                    // 向左移动，翻转动画
+                                    dynamicEntity->getComponent<CTransform>().pos.x += 250;
+                                    dynamicEntity->getComponent<CTransform>().pos.y -= 100;
+                                }
+                              
+                                if (dynamicEntity->getComponent<CHealth>().value <= 0) dynamicEntity->destroy();
+                                continue;
+                            }
+                            else if (multiEntity->tag() == PLAYER) {
+                                m_hurtMusic.play();
+                           
+                                multiEntity->getComponent<CHealth>().value -= 20;
+                                if (multiEntity->getComponent<CTransform>().velocity.x > 0) {
+                                    // 向右移动，确保动画未翻转
+                                    multiEntity->getComponent<CTransform>().pos.x -= 250;
+                                    multiEntity->getComponent<CTransform>().pos.y -= 100;
+                                }
+                                else if (multiEntity->getComponent<CTransform>().velocity.x < 0) {
+                                    // 向左移动，翻转动画
+                                    multiEntity->getComponent<CTransform>().pos.x += 250;
+                                    multiEntity->getComponent<CTransform>().pos.y -= 100;
+                                }
+                                if (multiEntity->getComponent<CHealth>().value <= 0) multiEntity->destroy();
+                                continue;
+                            }
+
+                        }
+                        else if (dynamicEntity->tag() == PLAYER && multiEntity->tag() == BOSSSHOOT) {
+                        
+                            m_hurtMusic.play();
+
+                            dynamicEntity->getComponent<CHealth>().value -= 30;
+                            multiEntity->destroy();
+                            if (dynamicEntity->getComponent<CHealth>().value <= 0) dynamicEntity->destroy();
+                            continue;
+                        }
+                        else if (dynamicEntity->tag() == BULLET && multiEntity->tag() == BOSS) {
+                            multiEntity->getComponent<CHealth>().value -= 5;
+                            dynamicEntity->destroy();
+                            if (multiEntity->getComponent<CHealth>().value <= 0) multiEntity->destroy();
+                            continue;
+                        }
+                        else if (dynamicEntity->tag() == BOSS && multiEntity->tag() == BULLET) {
+                            dynamicEntity->getComponent<CHealth>().value -= 5;
+                            multiEntity->destroy();
+                            if (dynamicEntity->getComponent<CHealth>().value <= 0) {
+                                dynamicEntity->destroy();
+                                bossalive = false;
+                                
+                                bossDefeatTimer.restart();
+                                Vec2 treasurePos;
+                                for (int i = 0; i < 6; i++) {
+                                    int randomNumber = std::rand() % 100;
+                                    treasurePos = multiEntity->getComponent<CTransform>().pos;
+                                    treasurePos.x -= m_gridSize.x * i; // Move the position for each item
+
+                                    if (randomNumber < 50) {
+                                        // 50% probability for coin
+                                        spawnCoin(treasurePos);
+                                    }
+                                    else if (randomNumber < 70) {
+                                        // 20% probability for flower
+                                        spawnFlower(treasurePos);
+                                    }
+                                    else if (randomNumber < 90) {
+                                        // 20% probability for mushroom
+                                        spawnMushroom(treasurePos);
+                                    }
+                                    else {
+                                        // 10% probability for star
+                                        spawnStar(treasurePos);
+                                    }
+                                }
+                            }
+                            continue;
+                        }
                         else if (dynamicEntity->tag() == GOOMBA && multiEntity->tag() == GOOMBA) {
-                            // Skip collision logic for Goomba-to-Goomba collision
+                           
+                            continue;
+                        }
+                        else if ((dynamicEntity->tag() == BOSS && multiEntity->tag() == GOOMBA) ||
+                            (dynamicEntity->tag() == GOOMBA && multiEntity->tag() == BOSS)) {
+                            
+                            continue;
+                        }else if ((dynamicEntity->tag() == BOSS && multiEntity->tag() == BOSSSHOOT) ||
+                            (dynamicEntity->tag() == BOSSSHOOT && multiEntity->tag() == BOSS)) {
+                            
+                            continue;
+                        }
+                        else if ((dynamicEntity->tag() == GOOMBA && multiEntity->tag() == BOSSSHOOT) ||
+                            (dynamicEntity->tag() == BOSSSHOOT && multiEntity->tag() == GOOMBA)) {
+                           
                             continue;
                         }
                         else {
@@ -774,8 +957,7 @@ void Scene_Play::sDoAction(const Action &action) {
         m_player->addComponents<CAnimation>(
             m_game->getAssets().getAnimation(eAnimationTypes::RUN), true);
         (m_player->getComponent<CTransform>().scale.x > 0)
-            ? m_player->getComponent<CTransform>().scale.x *= -1
-            : 1;
+            ? m_player->getComponent<CTransform>().scale.x *= -1 : 1;
         m_player->getComponent<CState>().state = RUNNING;
         break;
       case FIRE:
@@ -899,7 +1081,27 @@ void Scene_Play::sRender() {
       m_game->window().draw(healthBar);
   }
 
-  
+  for (auto& entity : m_entityManager.getEntities()) {
+      if (entity->tag() == BOSS && entity->isActive()) {
+          auto& health = entity->getComponent<CHealth>();
+
+          float healthBarWidth = 80.0f; // Width of the health bar at full health
+          float currentHealthWidth = healthBarWidth * (health.value / 100.0f);
+
+          sf::RectangleShape healthBarBackground(sf::Vector2f(healthBarWidth, 10));
+          healthBarBackground.setFillColor(sf::Color::Black);
+          healthBarBackground.setPosition(entity->getComponent<CTransform>().pos.x - 30,
+              entity->getComponent<CTransform>().pos.y - 75);
+
+          sf::RectangleShape healthBar(sf::Vector2f(currentHealthWidth, 10));
+          healthBar.setFillColor(sf::Color::Green);
+          healthBar.setPosition(entity->getComponent<CTransform>().pos.x - 30,
+              entity->getComponent<CTransform>().pos.y - 75);
+
+          m_game->window().draw(healthBarBackground);
+          m_game->window().draw(healthBar);
+      }
+  }
 
 
   // set the viewport of the window to be centered on the player if its far
@@ -968,6 +1170,7 @@ void Scene_Play::sRender() {
   if (!m_player->isActive()) {
       
       m_game->window().clear(sf::Color(190, 40, 1)); // 结算页面背景颜色
+      m_gameoverMusic.play();
       // 设置并渲染 "GAME OVER"
       gameOverText.setFont(m_game->getAssets().getFont(eFontTypes::PIXEL));
       gameOverText.setString("GAME OVER");
@@ -1006,7 +1209,7 @@ void Scene_Play::sRender() {
       
       sf::FloatRect pressBounds = pressText.getLocalBounds();
       pressText.setOrigin(pressBounds.left + pressBounds.width / 2.0f, pressBounds.top + pressBounds.height / 2.0f);
-      pressText.setPosition(m_game->window().getSize().x / 2.0f, m_game->window().getSize().y / 2.0f + 100);
+      pressText.setPosition(m_game->window().getSize().x / 2.0f, m_game->window().getSize().y / 2.0f + 120);
 
 
       sf::View currentView2 = m_game->window().getView();
@@ -1023,6 +1226,78 @@ void Scene_Play::sRender() {
       m_game->window().setView(currentView2);
 
   }
+
+
+      if (!bossalive && bossDefeatTimer.getElapsedTime().asSeconds() >= 5 ) {
+          //setPaused(!m_paused);
+           m_backgroundMusic.stop();
+          m_jumpMusic.stop();
+          m_coinMusic.stop();
+          m_shootMusic.stop();
+           m_gameoverMusic.stop();
+           m_dieMusic.stop();
+           m_pauseMusic.stop();
+           m_eatMusic.stop();
+           m_hurtMusic.stop();
+           
+          m_game->window().clear(sf::Color(190, 40, 1)); // 结算页面背景颜色
+          
+          // 设置并渲染 "GAME OVER"
+          winText.setFont(m_game->getAssets().getFont(eFontTypes::PIXEL));
+          winText.setString("CONGRATULATIONS!!!!");
+          winText.setCharacterSize(70); // 大号字体
+          winText.setFillColor(sf::Color(255, 211, 177)); // 字体颜色
+
+          sf::FloatRect winTextBounds = winText.getLocalBounds();
+          winText.setOrigin(winTextBounds.left + winTextBounds.width / 2.0f, winTextBounds.top + winTextBounds.height / 2.0f);
+          winText.setPosition(m_game->window().getSize().x / 2.0f, m_game->window().getSize().y / 2.0f - 150);
+
+          // 设置并渲染分数
+          m_scoreText.setCharacterSize(32); // 大号字体
+          m_scoreText.setFillColor(sf::Color(255, 211, 177)); // 字体颜色
+          sf::FloatRect scoreBounds = m_scoreText.getLocalBounds();
+          m_scoreText.setOrigin(scoreBounds.left + scoreBounds.width / 2.0f, scoreBounds.top + scoreBounds.height / 2.0f);
+          m_scoreText.setPosition(m_game->window().getSize().x / 2.0f, m_game->window().getSize().y / 2.0f);
+
+
+          // 设置并渲染分享提示
+          shareText.setFont(m_game->getAssets().getFont(eFontTypes::PIXEL));
+          shareText.setString("Please take a screenshot of the game's settlement screen to share on your Moments");
+          shareText.setCharacterSize(16); // 小号字体
+          shareText.setFillColor(sf::Color::Black); // 字体颜色
+
+          sf::FloatRect shareBounds = shareText.getLocalBounds();
+          shareText.setOrigin(shareBounds.left + shareBounds.width / 2.0f, shareBounds.top + shareBounds.height / 2.0f);
+          shareText.setPosition(m_game->window().getSize().x / 2.0f, m_game->window().getSize().y / 2.0f + 80);
+
+
+          // 设置并渲染分享提示
+          pressText.setFont(m_game->getAssets().getFont(eFontTypes::PIXEL));
+          pressText.setString("Press the Q key to return to the menu page");
+          pressText.setCharacterSize(16); // 小号字体
+          pressText.setFillColor(sf::Color::Black); // 字体颜色
+
+
+          sf::FloatRect pressBounds = pressText.getLocalBounds();
+          pressText.setOrigin(pressBounds.left + pressBounds.width / 2.0f, pressBounds.top + pressBounds.height / 2.0f);
+          pressText.setPosition(m_game->window().getSize().x / 2.0f, m_game->window().getSize().y / 2.0f + 120);
+
+
+          sf::View currentView4 = m_game->window().getView();
+
+          // Set the view to the default view to draw the score
+          m_game->window().setView(m_game->window().getDefaultView());
+
+          // Render the score text
+          m_game->window().draw(winText);
+          m_game->window().draw(m_scoreText);
+          m_game->window().draw(shareText);
+          m_game->window().draw(pressText);
+          // Restore the original view
+          m_game->window().setView(currentView4);
+          m_winMusic.play();
+      }
+    
  
   m_game->window().display();
 }

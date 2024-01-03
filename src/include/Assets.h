@@ -34,6 +34,11 @@ enum eTextureTypes {
   mariostar = 31,
   mariomushroom = 33,
   marioflower = 35,
+  marioboss = 37,
+  marioboss2 = 39,
+  mariobossshoot = 41,
+  mariLONGPIPE = 43,
+  mariWALL = 45,
   TLAST
 };
 
@@ -47,6 +52,7 @@ enum eSoundTypes {
     PAUSESOUND,
     EATINGSOUND,
     HURTSOUND,
+    WINSOUND,
     // Add other sound types here
     SLAST
 };

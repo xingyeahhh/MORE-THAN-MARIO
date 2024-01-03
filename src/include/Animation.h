@@ -29,6 +29,11 @@ enum eAnimationTypes {
   anistar = 31,
   animushroom = 33,
   aniflower = 35,
+  aniboss = 37,
+  aniboss2 = 39,
+  anibossSHOOT = 41,
+  aniLONGPIPE = 43,
+  aniWALL = 45,
   ALAST
 };
 
