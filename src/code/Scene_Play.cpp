@@ -45,6 +45,9 @@ void Scene_Play::init(const std::string &levelPath) {
 
   
 
+
+
+
   const sf::SoundBuffer& buffer = m_game->getAssets().getSound(eSoundTypes::musicSOUND);
   m_backgroundMusic.setBuffer(buffer);
   m_backgroundMusic.setLoop(true);
@@ -267,8 +270,7 @@ void Scene_Play::spawnPlayer() {
 
 void Scene_Play::spawnBullet(const std::shared_ptr<Entity> &entity) {
   Vec2 entityPos = entity->getComponent<CTransform>().pos;
-  (entity->getComponent<CTransform>().scale.x < 0) ? entityPos.x -= 52
-                                                   : entityPos.x += 20;
+  (entity->getComponent<CTransform>().scale.x < 0) ? entityPos.x -= 52: entityPos.x += 20;
   entityPos.y += 10;
   // TODO: this should spawn a bullet at the given entity, going in the
   // direction the entity is facing
@@ -317,7 +319,11 @@ void Scene_Play::update() {
 
     // The rest of your game update logic
     m_entityManager.update();
-    if (!m_player->isActive()) spawnPlayer();
+    if (!m_player->isActive()) {
+        //m_isGameOver = true;
+        m_backgroundMusic.stop();
+        return;
+    }
     sMovement();
     sCollision();
     sLifespan();
@@ -840,6 +846,8 @@ void Scene_Play::sRender() {
    
   }
 
+  
+
   if (m_paused) {
       //m_game->window().clear(sf::Color(87, 174, 209));
       // Save the current view
@@ -891,6 +899,7 @@ void Scene_Play::sRender() {
       m_game->window().draw(healthBar);
   }
 
+  
 
 
   // set the viewport of the window to be centered on the player if its far
@@ -956,6 +965,64 @@ void Scene_Play::sRender() {
       }
     }
   }
+  if (!m_player->isActive()) {
+      
+      m_game->window().clear(sf::Color(190, 40, 1)); // 结算页面背景颜色
+      // 设置并渲染 "GAME OVER"
+      gameOverText.setFont(m_game->getAssets().getFont(eFontTypes::PIXEL));
+      gameOverText.setString("GAME OVER");
+      gameOverText.setCharacterSize(70); // 大号字体
+      gameOverText.setFillColor(sf::Color(255, 211, 177)); // 字体颜色
 
+      sf::FloatRect gameOverBounds = gameOverText.getLocalBounds();
+      gameOverText.setOrigin(gameOverBounds.left + gameOverBounds.width / 2.0f, gameOverBounds.top + gameOverBounds.height / 2.0f);
+      gameOverText.setPosition(m_game->window().getSize().x / 2.0f, m_game->window().getSize().y / 2.0f - 150);
+
+      // 设置并渲染分数
+      m_scoreText.setCharacterSize(32); // 大号字体
+      m_scoreText.setFillColor(sf::Color(255, 211, 177)); // 字体颜色
+      sf::FloatRect scoreBounds = m_scoreText.getLocalBounds();
+      m_scoreText.setOrigin(scoreBounds.left + scoreBounds.width / 2.0f, scoreBounds.top + scoreBounds.height / 2.0f);
+      m_scoreText.setPosition(m_game->window().getSize().x / 2.0f, m_game->window().getSize().y / 2.0f);
+      
+
+      // 设置并渲染分享提示
+      shareText.setFont(m_game->getAssets().getFont(eFontTypes::PIXEL));
+      shareText.setString("Please take a screenshot of the game's settlement screen to share on your Moments");
+      shareText.setCharacterSize(16); // 小号字体
+      shareText.setFillColor(sf::Color::Black); // 字体颜色
+
+      sf::FloatRect shareBounds = shareText.getLocalBounds();
+      shareText.setOrigin(shareBounds.left + shareBounds.width / 2.0f, shareBounds.top + shareBounds.height / 2.0f);
+      shareText.setPosition(m_game->window().getSize().x / 2.0f, m_game->window().getSize().y / 2.0f + 80);
+      
+
+      // 设置并渲染分享提示
+      pressText.setFont(m_game->getAssets().getFont(eFontTypes::PIXEL));
+      pressText.setString("Press the Q key to return to the menu page");
+      pressText.setCharacterSize(16); // 小号字体
+      pressText.setFillColor(sf::Color::Black); // 字体颜色
+      
+      
+      sf::FloatRect pressBounds = pressText.getLocalBounds();
+      pressText.setOrigin(pressBounds.left + pressBounds.width / 2.0f, pressBounds.top + pressBounds.height / 2.0f);
+      pressText.setPosition(m_game->window().getSize().x / 2.0f, m_game->window().getSize().y / 2.0f + 100);
+
+
+      sf::View currentView2 = m_game->window().getView();
+
+      // Set the view to the default view to draw the score
+      m_game->window().setView(m_game->window().getDefaultView());
+
+      // Render the score text
+      m_game->window().draw(gameOverText);
+      m_game->window().draw(m_scoreText);
+      m_game->window().draw(shareText);
+      m_game->window().draw(pressText);
+      // Restore the original view
+      m_game->window().setView(currentView2);
+
+  }
+ 
   m_game->window().display();
 }

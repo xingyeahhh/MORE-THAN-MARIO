@@ -14,8 +14,12 @@ class Scene_Play : public Scene {
   };
 
   int m_score = 0;
+  
   sf::Text m_scoreText;
   sf::Text m_pauseText;
+  sf::Text gameOverText;
+  sf::Text shareText;
+  sf::Text pressText;
   sf::Sound m_backgroundMusic;
   sf::Sound m_jumpMusic;
   sf::Sound m_coinMusic;

@@ -70,29 +70,42 @@ void Scene_Menu::sUserInput() {
 }
 
 void Scene_Menu::sRender() {
+
+    sf::View currentView3 = m_game->window().getView();
+
+    // Set the view to the default view to draw the score
+    m_game->window().setView(m_game->window().getDefaultView());
+
   m_game->window().clear(sf::Color(190, 40, 1));
 
   // drawing the game title in the top-left of the screen
   m_menuText.setString(m_title);
-  m_menuText.setCharacterSize(32);
-  m_menuText.setFillColor(sf::Color::Black);
-  m_menuText.setPosition(sf::Vector2f(m_game->window().getSize().x / 2 - m_menuText.getCharacterSize() * 3, 10));
+  m_menuText.setCharacterSize(50);
+  m_menuText.setFillColor(sf::Color(255, 211, 177));
+  m_menuText.setPosition(sf::Vector2f(m_game->window().getSize().x / 2 - m_menuText.getCharacterSize() * 9.5, 150));
   m_game->window().draw(m_menuText);
 
   // draw all the menu options
   for (size_t i = 0; i < m_menuStrings.size(); i++) {
+    m_menuText.setCharacterSize(28);
     m_menuText.setString(m_menuStrings.at(i));
     m_menuText.setFillColor(i == m_selectedMenuIndex ? sf::Color(255, 211,177) : sf::Color::Black);
-    m_menuText.setPosition(sf::Vector2f(m_game->window().getSize().x / 2 - m_menuText.getCharacterSize() * 2, 250 + i * 72));
+    m_menuText.setPosition(sf::Vector2f(m_game->window().getSize().x / 2 - m_menuText.getCharacterSize() * 4, 364 + i * 72));
     m_game->window().draw(m_menuText);
   }
 
-  m_menuText.setString("Down :  S,     Up : W,     D : Do");
+  m_menuText.setString("    Down :  S,     Up : W,     D : Do");
   m_menuText.setFillColor(sf::Color::Black);
   m_menuText.setCharacterSize(16);
   m_menuText.setPosition(
-      sf::Vector2f(m_menuText.getCharacterSize(), height() - m_menuText.getCharacterSize() * 2));
+  sf::Vector2f(m_menuText.getCharacterSize(), height() - m_menuText.getCharacterSize() * 2));
   m_game->window().draw(m_menuText);
+
+  // Render the score text
+ 
+  // Restore the original view
+  m_game->window().setView(currentView3);
+
 
   m_game->window().display();
 }
