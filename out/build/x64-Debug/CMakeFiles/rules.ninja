@@ -47,7 +47,7 @@ rule CUSTOM_COMMAND
 # Rule for re-running cmake.
 
 rule RERUN_CMAKE
-  command = D:\vsstudio\VsStudio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe --regenerate-during-build -SD:\github\Not_Mario -BD:\github\Not_Mario\out\build\x64-Debug
+  command = D:\vsstudio\VsStudio\Common7\IDE\CommonExtensions\Microsoft\CMake\CMake\bin\cmake.exe --regenerate-during-build -SD:\github\MORE-THAN-MARIO -BD:\github\MORE-THAN-MARIO\out\build\x64-Debug
   description = Re-running CMake...
   generator = 1
 

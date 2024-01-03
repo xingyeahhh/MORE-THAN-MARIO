@@ -31,9 +31,7 @@ protected:
 public:
   explicit GameEngine(const std::string &path);
 
-  void changeScene(eGameEngineScenes scenes,
-                   const std::shared_ptr<Scene> &scene,
-                   bool endCurrentScene = false);
+  void changeScene(eGameEngineScenes scenes, const std::shared_ptr<Scene> &scene, bool endCurrentScene = false);
 
   void quit();
   void run();

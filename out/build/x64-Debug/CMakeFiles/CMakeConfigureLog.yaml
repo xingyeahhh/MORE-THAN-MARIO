@@ -39,7 +39,7 @@ events:
       Compilation of the C compiler identification source "CMakeCCompilerId.c" produced "CMakeCCompilerId.obj"
       
       The C compiler identification is MSVC, found in:
-        D:/github/Not_Mario/out/build/x64-Debug/CMakeFiles/3.27.2-msvc1/CompilerIdC/CMakeCCompilerId.exe
+        D:/github/MORE-THAN-MARIO/out/build/x64-Debug/CMakeFiles/3.27.2-msvc1/CompilerIdC/CMakeCCompilerId.exe
       
   -
     kind: "message-v1"
@@ -51,7 +51,7 @@ events:
     message: |
       Detecting C compiler /showIncludes prefix:
         main.c
-        Note: including file: D:\\github\\Not_Mario\\out\\build\\x64-Debug\\CMakeFiles\\ShowIncludes\\foo.h
+        Note: including file: D:\\github\\MORE-THAN-MARIO\\out\\build\\x64-Debug\\CMakeFiles\\ShowIncludes\\foo.h
         
       Found prefix "Note: including file: "
   -
@@ -85,7 +85,7 @@ events:
       Compilation of the CXX compiler identification source "CMakeCXXCompilerId.cpp" produced "CMakeCXXCompilerId.obj"
       
       The CXX compiler identification is MSVC, found in:
-        D:/github/Not_Mario/out/build/x64-Debug/CMakeFiles/3.27.2-msvc1/CompilerIdCXX/CMakeCXXCompilerId.exe
+        D:/github/MORE-THAN-MARIO/out/build/x64-Debug/CMakeFiles/3.27.2-msvc1/CompilerIdCXX/CMakeCXXCompilerId.exe
       
   -
     kind: "message-v1"
@@ -97,7 +97,7 @@ events:
     message: |
       Detecting CXX compiler /showIncludes prefix:
         main.c
-        Note: including file: D:\\github\\Not_Mario\\out\\build\\x64-Debug\\CMakeFiles\\ShowIncludes\\foo.h
+        Note: including file: D:\\github\\MORE-THAN-MARIO\\out\\build\\x64-Debug\\CMakeFiles\\ShowIncludes\\foo.h
         
       Found prefix "Note: including file: "
   -
@@ -109,8 +109,8 @@ events:
     checks:
       - "Detecting C compiler ABI info"
     directories:
-      source: "D:/github/Not_Mario/out/build/x64-Debug/CMakeFiles/CMakeScratch/TryCompile-oajplq"
-      binary: "D:/github/Not_Mario/out/build/x64-Debug/CMakeFiles/CMakeScratch/TryCompile-oajplq"
+      source: "D:/github/MORE-THAN-MARIO/out/build/x64-Debug/CMakeFiles/CMakeScratch/TryCompile-l3a1eb"
+      binary: "D:/github/MORE-THAN-MARIO/out/build/x64-Debug/CMakeFiles/CMakeScratch/TryCompile-l3a1eb"
     cmakeVariables:
       CMAKE_C_FLAGS: "/DWIN32 /D_WINDOWS"
       CMAKE_C_FLAGS_DEBUG: "/Zi /Ob0 /Od /RTC1"
@@ -119,11 +119,11 @@ events:
       variable: "CMAKE_C_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: 'D:/github/Not_Mario/out/build/x64-Debug/CMakeFiles/CMakeScratch/TryCompile-oajplq'
+        Change Dir: 'D:/github/MORE-THAN-MARIO/out/build/x64-Debug/CMakeFiles/CMakeScratch/TryCompile-l3a1eb'
         
-        Run Build Command(s): d:\\vsstudio\\vsstudio\\common7\\ide\\commonextensions\\microsoft\\cmake\\Ninja\\ninja.exe -v cmTC_6f155
-        [1/2] D:\\vsstudio\\VsStudio\\VC\\Tools\\MSVC\\14.38.33130\\bin\\Hostx64\\x64\\cl.exe  /nologo   /DWIN32 /D_WINDOWS  /Zi /Ob0 /Od /RTC1 -MDd /showIncludes /FoCMakeFiles\\cmTC_6f155.dir\\CMakeCCompilerABI.c.obj /FdCMakeFiles\\cmTC_6f155.dir\\ /FS -c D:\\vsstudio\\VsStudio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\share\\cmake-3.27\\Modules\\CMakeCCompilerABI.c
-        [2/2] cmd.exe /C "cd . && D:\\vsstudio\\VsStudio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\bin\\cmake.exe -E vs_link_exe --intdir=CMakeFiles\\cmTC_6f155.dir --rc=C:\\PROGRA~2\\WI3CF2~1\\10\\bin\\100226~1.0\\x64\\rc.exe --mt=C:\\PROGRA~2\\WI3CF2~1\\10\\bin\\100226~1.0\\x64\\mt.exe --manifests  -- D:\\vsstudio\\VsStudio\\VC\\Tools\\MSVC\\14.38.33130\\bin\\Hostx64\\x64\\link.exe /nologo CMakeFiles\\cmTC_6f155.dir\\CMakeCCompilerABI.c.obj  /out:cmTC_6f155.exe /implib:cmTC_6f155.lib /pdb:cmTC_6f155.pdb /version:0.0 /machine:x64  /debug /INCREMENTAL /subsystem:console  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib && cd ."
+        Run Build Command(s): d:\\vsstudio\\vsstudio\\common7\\ide\\commonextensions\\microsoft\\cmake\\Ninja\\ninja.exe -v cmTC_5db22
+        [1/2] D:\\vsstudio\\VsStudio\\VC\\Tools\\MSVC\\14.38.33130\\bin\\Hostx64\\x64\\cl.exe  /nologo   /DWIN32 /D_WINDOWS  /Zi /Ob0 /Od /RTC1 -MDd /showIncludes /FoCMakeFiles\\cmTC_5db22.dir\\CMakeCCompilerABI.c.obj /FdCMakeFiles\\cmTC_5db22.dir\\ /FS -c D:\\vsstudio\\VsStudio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\share\\cmake-3.27\\Modules\\CMakeCCompilerABI.c
+        [2/2] cmd.exe /C "cd . && D:\\vsstudio\\VsStudio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\bin\\cmake.exe -E vs_link_exe --intdir=CMakeFiles\\cmTC_5db22.dir --rc=C:\\PROGRA~2\\WI3CF2~1\\10\\bin\\100226~1.0\\x64\\rc.exe --mt=C:\\PROGRA~2\\WI3CF2~1\\10\\bin\\100226~1.0\\x64\\mt.exe --manifests  -- D:\\vsstudio\\VsStudio\\VC\\Tools\\MSVC\\14.38.33130\\bin\\Hostx64\\x64\\link.exe /nologo CMakeFiles\\cmTC_5db22.dir\\CMakeCCompilerABI.c.obj  /out:cmTC_5db22.exe /implib:cmTC_5db22.lib /pdb:cmTC_5db22.pdb /version:0.0 /machine:x64  /debug /INCREMENTAL /subsystem:console  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib && cd ."
         
       exitCode: 0
   -
@@ -135,8 +135,8 @@ events:
     checks:
       - "Detecting CXX compiler ABI info"
     directories:
-      source: "D:/github/Not_Mario/out/build/x64-Debug/CMakeFiles/CMakeScratch/TryCompile-b7d6gu"
-      binary: "D:/github/Not_Mario/out/build/x64-Debug/CMakeFiles/CMakeScratch/TryCompile-b7d6gu"
+      source: "D:/github/MORE-THAN-MARIO/out/build/x64-Debug/CMakeFiles/CMakeScratch/TryCompile-28eejs"
+      binary: "D:/github/MORE-THAN-MARIO/out/build/x64-Debug/CMakeFiles/CMakeScratch/TryCompile-28eejs"
     cmakeVariables:
       CMAKE_CXX_FLAGS: "/DWIN32 /D_WINDOWS /GR /EHsc"
       CMAKE_CXX_FLAGS_DEBUG: "/Zi /Ob0 /Od /RTC1"
@@ -145,11 +145,11 @@ events:
       variable: "CMAKE_CXX_ABI_COMPILED"
       cached: true
       stdout: |
-        Change Dir: 'D:/github/Not_Mario/out/build/x64-Debug/CMakeFiles/CMakeScratch/TryCompile-b7d6gu'
+        Change Dir: 'D:/github/MORE-THAN-MARIO/out/build/x64-Debug/CMakeFiles/CMakeScratch/TryCompile-28eejs'
         
-        Run Build Command(s): d:\\vsstudio\\vsstudio\\common7\\ide\\commonextensions\\microsoft\\cmake\\Ninja\\ninja.exe -v cmTC_cfb8d
-        [1/2] D:\\vsstudio\\VsStudio\\VC\\Tools\\MSVC\\14.38.33130\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP   /DWIN32 /D_WINDOWS /GR /EHsc  /Zi /Ob0 /Od /RTC1 -MDd /showIncludes /FoCMakeFiles\\cmTC_cfb8d.dir\\CMakeCXXCompilerABI.cpp.obj /FdCMakeFiles\\cmTC_cfb8d.dir\\ /FS -c D:\\vsstudio\\VsStudio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\share\\cmake-3.27\\Modules\\CMakeCXXCompilerABI.cpp
-        [2/2] cmd.exe /C "cd . && D:\\vsstudio\\VsStudio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\bin\\cmake.exe -E vs_link_exe --intdir=CMakeFiles\\cmTC_cfb8d.dir --rc=C:\\PROGRA~2\\WI3CF2~1\\10\\bin\\100226~1.0\\x64\\rc.exe --mt=C:\\PROGRA~2\\WI3CF2~1\\10\\bin\\100226~1.0\\x64\\mt.exe --manifests  -- D:\\vsstudio\\VsStudio\\VC\\Tools\\MSVC\\14.38.33130\\bin\\Hostx64\\x64\\link.exe /nologo CMakeFiles\\cmTC_cfb8d.dir\\CMakeCXXCompilerABI.cpp.obj  /out:cmTC_cfb8d.exe /implib:cmTC_cfb8d.lib /pdb:cmTC_cfb8d.pdb /version:0.0 /machine:x64  /debug /INCREMENTAL /subsystem:console  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib && cd ."
+        Run Build Command(s): d:\\vsstudio\\vsstudio\\common7\\ide\\commonextensions\\microsoft\\cmake\\Ninja\\ninja.exe -v cmTC_f9c17
+        [1/2] D:\\vsstudio\\VsStudio\\VC\\Tools\\MSVC\\14.38.33130\\bin\\Hostx64\\x64\\cl.exe  /nologo /TP   /DWIN32 /D_WINDOWS /GR /EHsc  /Zi /Ob0 /Od /RTC1 -MDd /showIncludes /FoCMakeFiles\\cmTC_f9c17.dir\\CMakeCXXCompilerABI.cpp.obj /FdCMakeFiles\\cmTC_f9c17.dir\\ /FS -c D:\\vsstudio\\VsStudio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\share\\cmake-3.27\\Modules\\CMakeCXXCompilerABI.cpp
+        [2/2] cmd.exe /C "cd . && D:\\vsstudio\\VsStudio\\Common7\\IDE\\CommonExtensions\\Microsoft\\CMake\\CMake\\bin\\cmake.exe -E vs_link_exe --intdir=CMakeFiles\\cmTC_f9c17.dir --rc=C:\\PROGRA~2\\WI3CF2~1\\10\\bin\\100226~1.0\\x64\\rc.exe --mt=C:\\PROGRA~2\\WI3CF2~1\\10\\bin\\100226~1.0\\x64\\mt.exe --manifests  -- D:\\vsstudio\\VsStudio\\VC\\Tools\\MSVC\\14.38.33130\\bin\\Hostx64\\x64\\link.exe /nologo CMakeFiles\\cmTC_f9c17.dir\\CMakeCXXCompilerABI.cpp.obj  /out:cmTC_f9c17.exe /implib:cmTC_f9c17.lib /pdb:cmTC_f9c17.pdb /version:0.0 /machine:x64  /debug /INCREMENTAL /subsystem:console  kernel32.lib user32.lib gdi32.lib winspool.lib shell32.lib ole32.lib oleaut32.lib uuid.lib comdlg32.lib advapi32.lib && cd ."
         
       exitCode: 0
 ...
