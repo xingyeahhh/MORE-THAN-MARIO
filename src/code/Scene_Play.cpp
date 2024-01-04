@@ -685,6 +685,13 @@ void Scene_Play::sCollision() {
                             dynamicEntity->getComponent<CInput>().up = false;
                             break;
 
+                        case WALL:
+                            std::cout << "hit WALL";
+
+                            dynamicEntity->getComponent<CTransform>().velocity.y = 9;//forbid skipping through the brick
+                            dynamicEntity->getComponent<CInput>().up = false;
+                            break;
+
                         default:
                             break;
                         }
