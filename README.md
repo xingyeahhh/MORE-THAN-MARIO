@@ -16,7 +16,10 @@ Customizable Player and Enemy Behaviors: The game features a robust configuratio
 ### Game Menu Screen
 ![image](https://github.com/xingyeahhh/MORE-THAN-MARIO-GAME/assets/123461462/0d888528-2f71-411a-a1fd-fea3711c43a1)
 
-### Game Menu Screen
+### Both the BOSS and the player have real-time health bars, and if you kill the BOSS, you will win.
+![image](https://github.com/xingyeahhh/MORE-THAN-MARIO-GAME/assets/123461462/806fa058-b756-4d62-bd19-d296dbe69ad2)
+
+
 
 # MORE-THAN-MARIO - Game Architecture Overview
 ## Component Classes
