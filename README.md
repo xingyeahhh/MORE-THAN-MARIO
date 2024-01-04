@@ -19,6 +19,20 @@ Customizable Player and Enemy Behaviors: The game features a robust configuratio
 ### Both the BOSS and the player have real-time health bars, and if you kill the BOSS, you will win.
 ![image](https://github.com/xingyeahhh/MORE-THAN-MARIO-GAME/assets/123461462/806fa058-b756-4d62-bd19-d296dbe69ad2)
 
+### Be careful of the terrain (lava and deep water) and the damage it can cause you.
+![image](https://github.com/xingyeahhh/MORE-THAN-MARIO-GAME/assets/123461462/1e4c41b9-7bc0-4017-ae78-b9853fc62546)
+
+### A variety of health restoration and score-boosting items.
+![image](https://github.com/xingyeahhh/MORE-THAN-MARIO-GAME/assets/123461462/591bd8c9-afcb-4582-9ee7-33e891f0cf88)
+
+### Jump up and break rocks to explore more places.
+![image](https://github.com/xingyeahhh/MORE-THAN-MARIO-GAME/assets/123461462/b7a0dc43-75ac-44bb-a6a0-24ae4ab7cae1)
+
+### Victory Screen
+![image](https://github.com/xingyeahhh/MORE-THAN-MARIO-GAME/assets/123461462/d5e63812-9442-406e-8c4e-e659fb0ae822)
+
+### Failure Screen
+![image](https://github.com/xingyeahhh/MORE-THAN-MARIO-GAME/assets/123461462/54e835c1-4fa3-46ba-a352-6c877df705fa)
 
 
 # MORE-THAN-MARIO - Game Architecture Overview
